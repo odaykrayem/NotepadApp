@@ -162,21 +162,19 @@
                     android:layout_height="match_parent"
                     android:layout_toStartOf="@id/iv_delete_audio"
                     android:layout_alignParentStart="true"
-                    app:enableVisualizer="true"
+                    app:enableVisualizer="false"
                     app:playPauseBackgroundColor="@color/colorAccent"
                     app:playPauseCornerRadius="100"
                     app:playProgressbarColor="@color/colorAccent"
                     app:progressTimeColor="@color/white"
-                    app:seekBarProgressColor="#000"
+                    app:seekBarProgressColor="@color/colorAccent"
                     app:seekBarThumbColor="@color/colorAccent"
                     app:shareCornerRadius="100"
                     app:showShareButton="false"
                     app:showTiming="true"
                     android:visibility="gone"
                     app:viewBackground="@color/colorPrimary"
-                    app:viewCornerRadius="10"
-                    app:visualizationNotPlayedColor="@color/colorAccent"
-                    app:visualizationPlayedColor="@color/colorAccent" />
+                    app:viewCornerRadius="10" />
 
 
                 <ImageView
