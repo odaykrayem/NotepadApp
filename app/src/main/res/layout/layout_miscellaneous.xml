@@ -218,7 +218,7 @@
     <LinearLayout
         android:id="@+id/layout_add_audio_misc"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_10sdp"
@@ -256,7 +256,7 @@
             android:id="@+id/recordButton"
             android:layout_width="0dp"
             android:layout_height="38dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="5dp"
             android:layout_weight="0.25"
             android:background="@drawable/mic_background"
