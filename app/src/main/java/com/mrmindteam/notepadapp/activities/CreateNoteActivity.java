@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,10 +18,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +35,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devlomi.record_view.OnRecordListener;
+import com.devlomi.record_view.RecordButton;
+import com.devlomi.record_view.RecordView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mrmindteam.notepadapp.Constants;
 import com.mrmindteam.notepadapp.R;
 import com.mrmindteam.notepadapp.dao.NotesDB;
 import com.mrmindteam.notepadapp.entities.Note;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import me.jagar.chatvoiceplayerlibrary.VoicePlayerView;
 
 import static com.mrmindteam.notepadapp.R.*;
 
@@ -51,19 +62,30 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextView mDateTimeTV, mWEbUrlTV;
     private LinearLayout webUrlLayout;
     private View subtitleIndicatorView;
+    private VoicePlayerView saveAudioVP;
+    RecordButton recordButton;
+    RecordView recordView;
+
 //    NotesDB myDataBase;
 
 //    private String selectedNoteColor;
      private String selectedNoteColor;
      private String selectedImagePath;
+     private String audioPath;
 
-     private AlertDialog addUrlDialog, deleteNoteDialog;
+    private MediaRecorder mediaRecorder;
+
+
+    private AlertDialog addUrlDialog, deleteNoteDialog;
 
 
      private Note alreadyAvailableNote;
 
      private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
-     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
+    private static final int REQUEST_CODE_AUDIO_PERMISSION = 3;
+    private static final int REQUEST_CODE_STORAGE_WRITE_PERMISSION = 100;
+
+    private static final int REQUEST_CODE_SELECT_IMAGE = 2;
      private ImageView imageNoteIV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +97,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageNoteIV = findViewById(id.iv_image_note);
         mWEbUrlTV = findViewById(id.tv_web_url);
         webUrlLayout = findViewById(id.layout_web_url);
+        saveAudioVP = findViewById(id.voicePlayerView);
+
 
         backIV.setOnClickListener(v->{
             onBackPressed();
@@ -117,8 +141,17 @@ public class CreateNoteActivity extends AppCompatActivity {
             selectedImagePath = "";
 
         });
+
+        findViewById(id.iv_delete_audio).setOnClickListener(v->{
+            findViewById(id.iv_audio).setVisibility(View.GONE);
+            audioPath = "";
+            saveAudioVP.onPause();
+            saveAudioVP.onStop();
+
+        });
         initMiscellaneous();
         setSubtitleIndicatorColor();
+
 
     }
     private void setViewOrUpdateNote(){
@@ -133,6 +166,16 @@ public class CreateNoteActivity extends AppCompatActivity {
             selectedImagePath = alreadyAvailableNote.getImagePath();
 
         }
+
+        if(alreadyAvailableNote.getAudioPath() != null && !alreadyAvailableNote.getAudioPath().trim().isEmpty()){
+            saveAudioVP.setAudio(alreadyAvailableNote.getAudioPath());
+            saveAudioVP.setVisibility(View.VISIBLE);
+            findViewById(id.iv_delete_audio).setVisibility(View.VISIBLE);
+            findViewById(id.iv_audio).setVisibility(View.VISIBLE);
+            audioPath = alreadyAvailableNote.getAudioPath();
+
+        }
+
 
         if(alreadyAvailableNote.getWebLink() != null && !alreadyAvailableNote.getWebLink().trim().isEmpty()){
             mWEbUrlTV.setText(alreadyAvailableNote.getWebLink());
@@ -155,6 +198,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(mDateTimeTV.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+        note.setAudioPath(audioPath);
 
         if(webUrlLayout.getVisibility() == View.VISIBLE){
             note.setWebLink(mWEbUrlTV.getText().toString());
@@ -288,6 +332,109 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        recordButton = linearLayoutMisc.findViewById(id.recordButton);
+        recordView = linearLayoutMisc.findViewById(id.recordView);
+        recordButton.setRecordView(recordView);
+
+        recordButton.setListenForRecord(false);
+
+        recordButton.setOnClickListener(view -> {
+
+            if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                        CreateNoteActivity.this,
+                        new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_CODE_AUDIO_PERMISSION
+                );
+
+            }else{
+                recordButton.setListenForRecord(true);
+            }
+        });
+
+        recordView.setOnRecordListener(new OnRecordListener() {
+            @Override
+            public void onStart() {
+                //Start Recording..
+                Log.d("RecordView", "onStart");
+
+                setUpRecording();
+
+                try {
+                    mediaRecorder.prepare();
+                    mediaRecorder.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                linearLayoutMisc.findViewById(id.record_audio_text).setVisibility(View.GONE);
+                recordView.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onCancel() {
+                //On Swipe To Cancel
+                Log.d("RecordView", "onCancel");
+
+                mediaRecorder.reset();
+                mediaRecorder.release();
+                File file = new File(audioPath);
+                if (file.exists())
+                    file.delete();
+
+                audioPath = "";
+
+                recordView.setVisibility(View.GONE);
+                linearLayoutMisc.findViewById(id.record_audio_text).setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onFinish(long recordTime) {
+                //Stop Recording..
+                Log.d("RecordView", "onFinish");
+
+                try {
+                    mediaRecorder.stop();
+                    mediaRecorder.release();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                recordView.setVisibility(View.GONE);
+                linearLayoutMisc.findViewById(id.record_audio_text).setVisibility(View.VISIBLE);
+
+                saveAudioVP.refreshPlayer(audioPath);
+                saveAudioVP.setVisibility(View.VISIBLE);
+                findViewById(id.iv_delete_audio).setVisibility(View.VISIBLE);
+                findViewById(id.iv_audio).setVisibility(View.VISIBLE);
+
+
+            }
+
+            @Override
+            public void onLessThanSecond() {
+                //When the record time is less than One Second
+                Log.d("RecordView", "onLessThanSecond");
+
+                mediaRecorder.reset();
+                mediaRecorder.release();
+
+                File file = new File(audioPath);
+                if (file.exists())
+                    file.delete();
+
+                audioPath = "";
+
+
+
+                recordView.setVisibility(View.GONE);
+                linearLayoutMisc.findViewById(id.record_audio_text).setVisibility(View.VISIBLE);
+            }
+        });
+
         linearLayoutMisc.findViewById(id.layout_add_url_misc).setOnClickListener(v->{
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             showAddUrlDialog();
@@ -303,6 +450,23 @@ public class CreateNoteActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+
+    private void setUpRecording() {
+
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "NotesApp/Media/Recording");
+
+        if (!file.exists())
+            file.mkdirs();
+        audioPath = file.getAbsolutePath() + File.separator + System.currentTimeMillis() + ".3gp";
+
+        mediaRecorder.setOutputFile(audioPath);
     }
 
     private void setSubtitleIndicatorColor(){

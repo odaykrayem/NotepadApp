@@ -33,6 +33,17 @@ public class Note implements Serializable {
     @ColumnInfo(name = "web_link")
     private String webLink;
 
+    @ColumnInfo(name = "audio_path")
+    private String audioPath;
+
+    public String getAudioPath() {
+        return audioPath;
+    }
+
+    public void setAudioPath(String audioPath) {
+        this.audioPath = audioPath;
+    }
+
     public int getId() {
         return id;
     }

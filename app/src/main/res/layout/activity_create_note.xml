@@ -147,6 +147,58 @@
                 app:layout_constraintTop_toTopOf="@id/iv_image_note"
 
                 />
+
+            <RelativeLayout
+                android:id="@+id/iv_audio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/iv_image_note"
+                android:padding="@dimen/_4sdp">
+
+                <me.jagar.chatvoiceplayerlibrary.VoicePlayerView
+                    android:id="@+id/voicePlayerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@id/iv_delete_audio"
+                    android:layout_alignParentStart="true"
+                    app:enableVisualizer="true"
+                    app:playPauseBackgroundColor="@color/colorAccent"
+                    app:playPauseCornerRadius="100"
+                    app:playProgressbarColor="@color/colorAccent"
+                    app:progressTimeColor="@color/white"
+                    app:seekBarProgressColor="#000"
+                    app:seekBarThumbColor="@color/colorAccent"
+                    app:shareCornerRadius="100"
+                    app:showShareButton="false"
+                    app:showTiming="true"
+                    android:visibility="gone"
+                    app:viewBackground="@color/colorPrimary"
+                    app:viewCornerRadius="10"
+                    app:visualizationNotPlayedColor="@color/colorAccent"
+                    app:visualizationPlayedColor="@color/colorAccent" />
+
+
+                <ImageView
+                    android:id="@+id/iv_delete_audio"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@drawable/background_delete"
+                    android:padding="@dimen/_4sdp"
+                    android:visibility="gone"
+                    android:layout_marginStart="16dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_delete"
+                    android:tint="@color/colorWhite"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    />
+            </RelativeLayout>
+
+
+
             <LinearLayout
                 android:id="@+id/layout_web_url"
                 android:layout_width="match_parent"
@@ -157,7 +209,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/iv_image_note"
+                app:layout_constraintTop_toBottomOf="@id/iv_audio"
                 tools:ignore="UseCompoundDrawables">
 
                 <TextView

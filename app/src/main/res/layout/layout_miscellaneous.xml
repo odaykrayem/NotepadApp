@@ -215,6 +215,58 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_add_audio_misc"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/record_audio_text"
+            android:layout_width="0dp"
+            android:layout_weight="1.7"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:includeFontPadding="false"
+            android:text="@string/add_audio"
+            android:textColor="@color/colorIcons"
+            android:textSize="@dimen/_12ssp"
+
+            />
+
+        <com.devlomi.record_view.RecordView
+            android:id="@+id/recordView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.7"
+            android:visibility="gone"
+            app:slide_to_cancel_arrow="@drawable/recv_ic_arrow"
+            app:slide_to_cancel_arrow_color="@android:color/black"
+            app:slide_to_cancel_text="Slide to cancel" />
+
+
+
+        <com.devlomi.record_view.RecordButton
+            android:id="@+id/recordButton"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.25"
+            android:background="@drawable/mic_background"
+            android:scaleType="center"
+            android:tint="@color/colorAccent"
+            app:mic_icon="@drawable/ic_mic" />
+
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/layout_delete_note_misc"
@@ -248,4 +300,6 @@
 
             />
     </LinearLayout>
+
+
 </LinearLayout>
