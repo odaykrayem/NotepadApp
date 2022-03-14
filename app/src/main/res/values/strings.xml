@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Notepad App</string>
+    <string name="my_notes">My notes</string>
+    <string name="search_notes">Search notes</string>
+    <string name="note_title">Note title</string>
+    <string name="note_subtitle">Note subtitle</string>
+    <string name="type_note_here">Type note here</string>
+    <string name="empty_note_title">Please add a title for this note</string>
+    <string name="empty_note_subtitle">Please add subtitle for this note</string>
+    <string name="empty_note">Poor empty note  [-_-]</string>
+    <string name="miscellaneous">Miscellaneous</string>
+    <string name="pick_color">Pick color</string>
+    <string name="add_image">Add Image</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="add_url">Add URL</string>
+    <string name="hint_add_url">Enter URL</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_enter_url">Please enter URL</string>
+    <string name="please_enter_valid_url">Please enter a valid URL</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="are_u_sure_delete">Are you sure you want to delete this note ?</string>
+    <string name="delete">Delete</string>
+</resources>
