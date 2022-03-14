@@ -35,20 +35,43 @@
         android:paddingEnd="@dimen/_10sdp"
         app:layout_constraintTop_toBottomOf="@id/textMyNotes">
 
-        <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_search"
-            android:tint="@color/colorSearchIcon"
+<!--        <ImageView-->
+<!--            android:layout_width="@dimen/_20sdp"-->
+<!--            android:layout_height="@dimen/_20sdp"-->
+<!--            android:contentDescription="@string/app_name"-->
+<!--            android:src="@drawable/ic_search"-->
+<!--            android:tint="@color/colorSearchIcon"-->
 
-            />
+<!--            />-->
 
-        <EditText
-            android:id="@+id/input_search"
+<!--        <EditText-->
+<!--            android:id="@+id/input_search"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/_35sdp"-->
+<!--            android:layout_marginStart="@dimen/_12sdp"-->
+<!--            android:background="@null"-->
+<!--            android:fontFamily="@font/ubuntu_regular"-->
+<!--            android:hint="@string/search_notes"-->
+<!--            android:imeOptions="actionDone"-->
+<!--            android:importantForAutofill="no"-->
+<!--            android:includeFontPadding="false"-->
+<!--            android:inputType="text"-->
+<!--            android:textColor="@color/colorWhite"-->
+<!--            android:textColorHint="@color/colorTextHint"-->
+<!--            android:textSize="@dimen/_13ssp" />-->
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="start"
+            android:iconifiedByDefault="false"
+            android:textAlignment="textStart"
+            app:iconifiedByDefault="false"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:queryHint="@string/search_notes"
+            app:searchIcon="@drawable/ic_search"
             android:background="@null"
             android:fontFamily="@font/ubuntu_regular"
             android:hint="@string/search_notes"
@@ -58,8 +81,9 @@
             android:inputType="text"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorTextHint"
-            android:textSize="@dimen/_13ssp" />
-
+            android:textSize="@dimen/_13ssp"
+            android:layoutDirection="ltr"
+            />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -80,7 +104,7 @@
     <LinearLayout
         android:id="@+id/layout_quick_actions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_40sdp"
         android:background="@color/colorQuickActionsBackground"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -89,47 +113,12 @@
 
         >
 
-        <ImageView
-            android:id="@+id/add_note"
-            android:layout_width="@dimen/_23sdp"
-            android:layout_height="@dimen/_23sdp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_add_outline"
-            android:tint="@color/colorIcons"
-
-
-            />
-
-        <ImageView
-            android:id="@+id/add_image"
-            android:layout_width="@dimen/_23sdp"
-            android:layout_height="@dimen/_23sdp"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_image"
-            android:tint="@color/colorIcons"
-
-
-            />
-
-        <ImageView
-            android:id="@+id/add_web_link"
-            android:layout_width="@dimen/_23sdp"
-            android:layout_height="@dimen/_23sdp"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_web_link"
-            android:tint="@color/colorIcons"
-
-
-            />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/add_note_main"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
         android:background="@drawable/background_add_button"
         android:contentDescription="@string/app_name"
         android:padding="@dimen/_5sdp"
@@ -137,7 +126,12 @@
         android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@id/layout_quick_actions"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/layout_quick_actions" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layout_quick_actions"
+
+        />
+<!--    android:layout_marginEnd="@dimen/_30sdp"-->
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,29 @@
 package com.mrmindteam.notepadapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mrmindteam.notepadapp.Constants;
 import com.mrmindteam.notepadapp.R;
@@ -33,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     private ArrayList<Note> list;
     ImageView addNoteMainIV;
 
+//    EditText mSearchET;
+    SearchView searchView;
     private int noteClickedPosition = -1;
 
     @Override
@@ -57,7 +72,44 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         mAdapter = new NotesAdapter(this, list, this);
         mRV.setAdapter(mAdapter);
         getNotes(REQUEST_CODE_SHOW_NOTES, false);
+
+//        mSearchET = findViewById(R.id.input_search);
+//        mSearchET.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                mAdapter.cancelTimer();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if(list.size() != 0){
+//                    mAdapter.searchNotes(s.toString());
+//                }
+//            }
+//        });
+        searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+
     }
+
+
     private void getNotes(final  int requestCode, final boolean isNoteDeleted){
 
         @SuppressLint("StaticFieldLeak")
