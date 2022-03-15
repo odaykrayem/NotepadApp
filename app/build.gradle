@@ -47,6 +47,11 @@ dependencies {
 
     implementation 'com.github.JagarYousef:ChatVoicePlayer:1.0.7'
 
+
+
+    implementation 'com.itextpdf:itextg:5.5.10'
+
+
     def room_version = '2.3.0'
 
     implementation "androidx.room:room-runtime:$room_version"

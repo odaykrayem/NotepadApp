@@ -1,9 +1,11 @@
 package com.mrmindteam.notepadapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mrmindteam.notepadapp.R;
+import com.mrmindteam.notepadapp.activities.Main;
 import com.mrmindteam.notepadapp.entities.Note;
 import com.mrmindteam.notepadapp.listeners.NoteListener;
 
@@ -61,6 +65,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         holder.noteLayout.setOnClickListener(v->{
             noteListener.onNoteClicked(list.get(position), position);
 
+        });
+
+        holder.share.setOnClickListener(v -> {
+            Intent intent = new Intent(ctx, Main.class);
+            intent.putExtra("share", list.get(position));
+            ctx.startActivity(intent);
         });
 
     }
@@ -117,6 +127,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         TextView title , subtitle, dateTime;
         LinearLayout noteLayout;
         RoundedImageView  imageNoteRIV;
+        ImageView share, record;
 
 
         NoteViewHolder(@NonNull View itemView) {
@@ -126,6 +137,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             dateTime = itemView.findViewById(R.id.date_time);
             noteLayout = itemView.findViewById(R.id.layout_note);
             imageNoteRIV = itemView.findViewById(R.id.riv_image_note);
+            share = itemView.findViewById(R.id.share_btn);
+            record = itemView.findViewById(R.id.record);
 
         }
 
@@ -148,6 +161,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             }else {
                 imageNoteRIV.setVisibility(View.GONE);
+            }
+
+            if(note.getAudioPath() != null){
+                record.setVisibility(View.VISIBLE);
+            }else {
+                record.setVisibility(View.GONE);
             }
         }
 
