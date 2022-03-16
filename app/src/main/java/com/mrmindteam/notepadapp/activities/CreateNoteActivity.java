@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -41,8 +40,8 @@ import com.devlomi.record_view.RecordView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mrmindteam.notepadapp.Constants;
 import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.dao.NotesDB;
-import com.mrmindteam.notepadapp.entities.Note;
+import com.mrmindteam.notepadapp.sqlite.NotesDB;
+import com.mrmindteam.notepadapp.models.Note;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,18 +71,19 @@ public class CreateNoteActivity extends AppCompatActivity {
      private String selectedNoteColor;
      private String selectedImagePath;
      private String audioPath;
+     private boolean isNoteLocked, toLock, toUnLock;
+     private String notePassword;
 
     private MediaRecorder mediaRecorder;
 
 
-    private AlertDialog addUrlDialog, deleteNoteDialog;
+    private AlertDialog addUrlDialog, deleteNoteDialog, addLockDialog;
 
 
      private Note alreadyAvailableNote;
 
      private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_AUDIO_PERMISSION = 3;
-    private static final int REQUEST_CODE_STORAGE_WRITE_PERMISSION = 100;
 
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
      private ImageView imageNoteIV;
@@ -122,6 +122,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         selectedNoteColor = Constants.COLOR_NOTE_DEFAULT;
 //        selectedNoteColor = getResources().getColor(color.colorDefaultNoteColor);
         selectedImagePath = "";
+        isNoteLocked = false;
+        toLock = false;
+        toUnLock = false;
+        notePassword = "";
 
         if(getIntent().getBooleanExtra(Constants.IS_VIEW_OR_UPDATE, false)){
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra(Constants.NOTE);
@@ -164,7 +168,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             imageNoteIV.setVisibility(View.VISIBLE);
             findViewById(id.iv_delete_img).setVisibility(View.VISIBLE);
             selectedImagePath = alreadyAvailableNote.getImagePath();
-
         }
 
         if(alreadyAvailableNote.getAudioPath() != null && !alreadyAvailableNote.getAudioPath().trim().isEmpty()){
@@ -181,6 +184,10 @@ public class CreateNoteActivity extends AppCompatActivity {
             mWEbUrlTV.setText(alreadyAvailableNote.getWebLink());
             mWEbUrlTV.setVisibility(View.VISIBLE);
 
+        }
+        if(alreadyAvailableNote.isLocked()){
+            isNoteLocked = true;
+            notePassword = alreadyAvailableNote.getPassword();
         }
     }
     private void saveNote(){
@@ -199,7 +206,21 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
         note.setAudioPath(audioPath);
+        Log.e("lock  ", String.valueOf(toLock) + "unlock :" + String.valueOf(toUnLock) +"isUnLocked" + String.valueOf(isNoteLocked));
 
+        if(toLock){
+            note.setLocked(toLock);
+            note.setPassword(notePassword);
+        }
+        else if(toUnLock){
+            //if variable toUnlock is true this means that we unlocked this note so the tolock
+            //variable is still false for sure and we can use it
+            note.setLocked(toLock);
+            note.setPassword(notePassword);
+        }else{
+            note.setLocked(isNoteLocked);
+            note.setPassword(notePassword);
+        }
         if(webUrlLayout.getVisibility() == View.VISIBLE){
             note.setWebLink(mWEbUrlTV.getText().toString());
         }
@@ -210,8 +231,6 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
 //        myDataBase.noteDao().insertNote(note);
 
-
-
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
             @Override
@@ -219,14 +238,12 @@ public class CreateNoteActivity extends AppCompatActivity {
                 NotesDB.getDataBase(getApplicationContext()).noteDao().insertNote(note);
                 return null;
             }
-
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
-
             }
         }
         new SaveNoteTask().execute();
@@ -450,6 +467,26 @@ public class CreateNoteActivity extends AppCompatActivity {
             });
 
         }
+
+        if(alreadyAvailableNote != null){
+            linearLayoutMisc.findViewById(id.layout_lock_note_misc).setVisibility(View.VISIBLE);
+            TextView miscLockTV= findViewById(id.tv_misc_lock);
+            ImageView miscLockIV = findViewById(id.iv_misc_lock);
+            //this mean that it is now unlocked and we can lock it
+            if(isNoteLocked){
+                miscLockTV.setText(Constants.UN_LOCK);
+                miscLockIV.setImageResource(R.drawable.ic_unlock);
+            }else{
+                miscLockTV.setText(Constants.LOCK);
+                miscLockIV.setImageResource(R.drawable.ic_lock);
+            }
+            linearLayoutMisc.findViewById(id.layout_lock_note_misc).setOnClickListener(v->{
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                showLockDialog();
+
+            });
+
+        }
     }
 
 
@@ -497,6 +534,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //this code for selecting image from the gallery
         if(requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK){
             if(data != null){
                 Uri selectedImageUri = data.getData();
@@ -544,7 +582,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             if(addUrlDialog.getWindow() != null){
                 addUrlDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
             }
-            final EditText urlET = view.findViewById(R.id.et_add_url);
+            final EditText urlET = view.findViewById(R.id.et_add_web_link);
             urlET.requestFocus();
 
             view.findViewById(id.tv_add_url).setOnClickListener(v->{
@@ -564,6 +602,83 @@ public class CreateNoteActivity extends AppCompatActivity {
             });
         }
         addUrlDialog.show();
+    }
+
+    private void showLockDialog(){
+        if(addLockDialog == null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
+            View view = LayoutInflater.from(this).inflate(
+                    layout.dialog_lock_unlock,
+                    (ViewGroup) findViewById(id.layout_add_lock_dialog)
+            );
+            builder.setView(view);
+            addLockDialog = builder.create();
+            if(addLockDialog.getWindow() != null){
+                addLockDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            final EditText passET = view.findViewById(id.et_password);
+            final EditText confirmET = view.findViewById(id.et_confirm_password);
+            if(isNoteLocked){
+                confirmET.setVisibility(View.GONE);
+            }else{
+                confirmET.setVisibility(View.VISIBLE);
+            }
+            final TextView lockNoteTV = view.findViewById(id.tv_lock_note);
+            final TextView lockTV = view.findViewById(id.tv_lock);
+            final ImageView lockNoteIV = view.findViewById(id.iv_lock_note);
+
+            if (alreadyAvailableNote.isLocked()) {
+                lockNoteTV.setText(Constants.UN_LOCK);
+                lockTV.setText("UnLock");
+                lockNoteIV.setImageResource(R.drawable.ic_unlock);
+            } else {
+                lockNoteTV.setText(Constants.LOCK);
+                lockTV.setText("Lock");
+                lockNoteIV.setImageResource(drawable.ic_lock);
+            }
+            passET.requestFocus();
+
+            if(isNoteLocked){
+                view.findViewById(id.tv_lock).setOnClickListener(v->{
+                    if(passET.getText().toString().trim().isEmpty()){
+                        Toast.makeText(this, getResources().getString(string.password_empty_error), Toast.LENGTH_SHORT).show();
+                    }else{
+                        String pass = passET.getText().toString().trim();
+                        if(notePassword.equals(pass)){
+                            toUnLock = true;
+                            toLock = false;
+                            notePassword = "";
+                            addLockDialog.dismiss();
+                        }else{
+                            Toast.makeText(this, getResources().getString(string.password_error), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+            }else{
+                view.findViewById(id.tv_lock).setOnClickListener(v->{
+                    if(passET.getText().toString().trim().isEmpty()){
+                        Toast.makeText(this, getResources().getString(string.password_empty_error), Toast.LENGTH_SHORT).show();
+                    }else if(confirmET.getText().toString().trim().isEmpty()){
+                        Toast.makeText(this, getResources().getString(string.confirm_password_empty_error), Toast.LENGTH_SHORT).show();
+                    }else if(passET.getText().toString().trim().equals(confirmET.getText().toString().trim())){
+                        toLock = true;
+                        toUnLock = false;
+                        notePassword = passET.getText().toString().trim();
+                        addLockDialog.dismiss();
+                    }else{
+                        Toast.makeText(this, getResources().getString(string.confirm_password_equal_error), Toast.LENGTH_SHORT).show();
+                        confirmET.setText("");
+                        confirmET.requestFocus();
+                    }
+                });
+            }
+
+            view.findViewById(id.tv_cancel).setOnClickListener(v->{
+                addLockDialog.dismiss();
+            });
+        }
+        addLockDialog.show();
     }
 
     private void showDeleteNoteDialog(){

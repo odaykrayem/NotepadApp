@@ -1,6 +1,6 @@
 package com.mrmindteam.notepadapp.listeners;
 
-import com.mrmindteam.notepadapp.entities.Note;
+import com.mrmindteam.notepadapp.models.Note;
 
 public interface NoteListener {
 

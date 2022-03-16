@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.dao;
+package com.mrmindteam.notepadapp.sqlite;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.mrmindteam.notepadapp.entities.Note;
+import com.mrmindteam.notepadapp.models.Note;
 
 @Database(entities = {Note.class}, version = 1, exportSchema = false)
 public abstract  class NotesDB extends RoomDatabase {

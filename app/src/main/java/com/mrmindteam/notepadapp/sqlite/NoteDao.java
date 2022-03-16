@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.dao;
+package com.mrmindteam.notepadapp.sqlite;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.mrmindteam.notepadapp.entities.Note;
+import com.mrmindteam.notepadapp.models.Note;
 
 import java.util.List;
 

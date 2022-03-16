@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.entities;
+package com.mrmindteam.notepadapp.models;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -35,6 +35,28 @@ public class Note implements Serializable {
 
     @ColumnInfo(name = "audio_path")
     private String audioPath;
+
+    @ColumnInfo(name = "is_locked")
+    private boolean isLocked = false;
+
+    @ColumnInfo(name = "password")
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
 
     public String getAudioPath() {
         return audioPath;

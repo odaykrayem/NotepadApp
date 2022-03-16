@@ -81,7 +81,33 @@
                 android:background="@drawable/background_share"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_8sdp"/>
-
+            <ImageView
+                android:id="@+id/lock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lock"
+                android:tint="@color/colorDelete"
+                android:padding="@dimen/_6sdp"
+                android:background="@drawable/background_share"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_toStartOf="@id/share_btn"
+                android:layout_marginEnd="@dimen/_10sdp"
+                />
+            <ImageView
+                android:id="@+id/unlock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_unlock"
+                android:tint="@color/colorAccent"
+                android:padding="@dimen/_6sdp"
+                android:visibility="gone"
+                android:background="@drawable/background_share"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_toStartOf="@id/share_btn"
+                android:layout_marginEnd="@dimen/_10sdp"
+                />
             <ImageView
                 android:id="@+id/share_btn"
                 android:layout_width="wrap_content"

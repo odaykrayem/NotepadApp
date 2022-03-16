@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/layout_add_lock_dialog"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_delete_note"
     android:layout_gravity="center"
     android:layout_margin="@dimen/_10sdp"
-    android:background="@drawable/background_dialog">
+    android:background="@drawable/background_dialog"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/iv_lock_note"
@@ -15,20 +15,20 @@
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_lock"
         android:tint="@color/colorWhite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
-
     <TextView
+        android:id="@+id/tv_lock_note"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:includeFontPadding="false"
         android:fontFamily="@font/ubuntu_bold"
-        android:text="@string/delete_note"
+        android:text="@string/lock_note"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/_14ssp"
         app:layout_constraintBottom_toBottomOf="@id/iv_lock_note"
@@ -36,28 +36,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_lock_note"
         />
-    <TextView
-        android:id="@+id/tv_delete_msg"
+    <EditText
+        android:id="@+id/et_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_35sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:background="@null"
         android:fontFamily="@font/ubuntu_regular"
         android:gravity="center_vertical"
-        android:text="@string/are_u_sure_delete"
+        android:hint="@string/password"
         android:textColor="@color/colorWhite"
         android:includeFontPadding="false"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textUri"
+        android:textColorHint="@color/colorTextHint"
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintTop_toBottomOf="@id/iv_lock_note"
 
         />
+    <EditText
+        android:id="@+id/et_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@null"
+        android:fontFamily="@font/ubuntu_regular"
+        android:gravity="center_vertical"
+        android:hint="@string/confirm_password"
+        android:textColor="@color/colorWhite"
+        android:includeFontPadding="false"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textUri"
+        android:textColorHint="@color/colorTextHint"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintTop_toBottomOf="@id/et_password"
 
+        />
     <TextView
-        android:id="@+id/tv_delete"
+        android:id="@+id/tv_lock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_8sdp"
@@ -65,13 +91,12 @@
         android:padding="@dimen/_8sdp"
         android:fontFamily="@font/ubuntu_medium"
         android:includeFontPadding="false"
-        android:text="@string/delete"
-        android:textAllCaps="true"
+        android:text="@string/lock"
         android:textColor="@color/colorDelete"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_delete_msg"
+        app:layout_constraintTop_toBottomOf="@id/et_confirm_password"
         />
 
     <TextView
@@ -87,7 +112,7 @@
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv_delete"
-        app:layout_constraintTop_toBottomOf="@id/tv_delete_msg"
+        app:layout_constraintEnd_toStartOf="@id/tv_lock"
+        app:layout_constraintTop_toBottomOf="@id/et_confirm_password"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

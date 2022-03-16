@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -21,14 +20,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.mrmindteam.notepadapp.NoteLockMVP.LockNoteActivity;
 import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.activities.Main;
-import com.mrmindteam.notepadapp.entities.Note;
+import com.mrmindteam.notepadapp.activities.ShareNoteActivity;
+import com.mrmindteam.notepadapp.models.Note;
 import com.mrmindteam.notepadapp.listeners.NoteListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -68,10 +66,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         });
 
         holder.share.setOnClickListener(v -> {
-            Intent intent = new Intent(ctx, Main.class);
+            Intent intent = new Intent(ctx, ShareNoteActivity.class);
             intent.putExtra("share", list.get(position));
             ctx.startActivity(intent);
         });
+
 
     }
 
@@ -127,7 +126,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         TextView title , subtitle, dateTime;
         LinearLayout noteLayout;
         RoundedImageView  imageNoteRIV;
-        ImageView share, record;
+        ImageView share, record, lock, unlock;
 
 
         NoteViewHolder(@NonNull View itemView) {
@@ -139,6 +138,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             imageNoteRIV = itemView.findViewById(R.id.riv_image_note);
             share = itemView.findViewById(R.id.share_btn);
             record = itemView.findViewById(R.id.record);
+            lock = itemView.findViewById(R.id.lock);
+            unlock = itemView.findViewById(R.id.unlock);
 
         }
 
@@ -168,10 +169,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             }else {
                 record.setVisibility(View.GONE);
             }
+            if(note.isLocked()){
+                lock.setVisibility(View.VISIBLE);
+                unlock.setVisibility(View.GONE);
+            }else{
+                lock.setVisibility(View.GONE);
+                unlock.setVisibility(View.VISIBLE);
+            }
         }
 
 
     }
+
+
     public void searchNotes(final String searchKeyWord){
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -200,7 +210,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             }
         }, 500);
     }
-
     public void cancelTimer(){
         if(timer != null){
             timer.cancel();

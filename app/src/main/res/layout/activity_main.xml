@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainActivity"
+    android:layoutDirection="ltr">
 
     <TextView
         android:id="@+id/textMyNotes"
@@ -13,14 +14,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_35sdp"
         android:fontFamily="@font/ubuntu_bold"
         android:includeFontPadding="false"
         android:text="@string/my_notes"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/_20ssp"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <ImageView
+        android:id="@+id/lock_note"
+        android:layout_width="@dimen/_26sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_about_us"
+        android:tint="@color/colorIcons"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textMyNotes"
+        />
     <LinearLayout
         android:id="@+id/layout_search"
         android:layout_width="match_parent"
@@ -113,6 +127,7 @@
 
         >
 
+
     </LinearLayout>
 
     <ImageView
@@ -128,7 +143,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/layout_quick_actions"
-
         />
 <!--    android:layout_marginEnd="@dimen/_30sdp"-->
 

@@ -22,4 +22,14 @@
     <string name="are_u_sure_delete">Are you sure you want to delete this note ?</string>
     <string name="delete">Delete</string>
     <string name="add_audio">Add Audio</string>
+    <string name="password_error">Wrong password [*_^]</string>
+    <string name="password_empty_error">Please fill the field with a password</string>
+    <string name="confirm_password_empty_error">Please write the password again</string>
+    <string name="confirm_password_equal_error">Please write the same password again</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="lock_note">Lock Note</string>
+    <string name="lock">Lock</string>
+    <string name="lock_unlock_note">Lock \\ unlock Note</string>
+    <string name="check">Check</string>
 </resources>

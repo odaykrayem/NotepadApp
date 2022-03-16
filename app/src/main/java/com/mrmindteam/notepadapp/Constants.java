@@ -12,4 +12,7 @@ public class Constants {
 
 
     public static final String IS_NOTE_DELETED = "isNoteDeleted";
+    public static final String LOCK = "Lock Note";
+    public static final String UN_LOCK = "Unlock Note ";
+    public static final String NOTE_PASS = "notepass";
 }

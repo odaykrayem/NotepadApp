@@ -1,20 +1,15 @@
 package com.mrmindteam.notepadapp.activities;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -24,14 +19,13 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mrmindteam.notepadapp.BuildConfig;
 import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.entities.Note;
-
+import com.mrmindteam.notepadapp.models.Note;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-public class Main extends Activity {
+public class ShareNoteActivity extends Activity {
 
     private static String FILE;
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
@@ -49,7 +43,7 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_share_note);
 
         shareNote = (Note) getIntent().getSerializableExtra("share");
 
