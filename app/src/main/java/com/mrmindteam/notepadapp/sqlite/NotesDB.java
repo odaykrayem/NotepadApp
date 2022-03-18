@@ -24,6 +24,7 @@ public abstract  class NotesDB extends RoomDatabase {
         }
         return notesDB;
     }
+
 //    public static  NotesDB getDataBase(Context ctx){
 //        if(notesDB == null){
 //            notesDB = Room.databaseBuilder(

@@ -24,19 +24,13 @@ import android.media.RingtoneManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.system.Os;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.itextpdf.text.pdf.qrcode.WriterException;
-import com.mrmindteam.notepadapp.BuildConfig;
 import com.mrmindteam.notepadapp.Constants;
 import com.mrmindteam.notepadapp.NoteLockMVP.LockNoteActivity;
 import com.mrmindteam.notepadapp.R;
@@ -124,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 //                }
 //            }
 //        });
+
         searchView = findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -137,8 +132,6 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                 return true;
             }
         });
-
-
     }
 
     private void showQrDialog() {
