@@ -16,8 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".NoteLockMVP.LockNoteActivity"></activity>
-        <activity android:name=".activities.ShareNoteActivity"></activity>
+        <activity android:name=".activities.AboutUsActivity"></activity>
+        <activity android:name=".NoteLockMVP.LockNoteActivity" />
+        <activity android:name=".activities.ShareNoteActivity" />
         <activity
             android:name=".activities.CreateNoteActivity"
             android:screenOrientation="portrait"

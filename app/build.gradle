@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.github.JagarYousef:ChatVoicePlayer:1.0.7'
 
 
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 
     implementation 'com.itextpdf:itextg:5.5.10'
 

@@ -32,4 +32,5 @@
     <string name="lock">Lock</string>
     <string name="lock_unlock_note">Lock \\ unlock Note</string>
     <string name="check">Check</string>
+    <string name="qr_code">Qr Code</string>
 </resources>

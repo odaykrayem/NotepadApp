@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.mrmindteam.notepadapp.models.Note;
 
@@ -18,6 +19,9 @@ public interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNote(Note note);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateNote(Note note);
 
     @Delete
     void deleteNote(Note note);

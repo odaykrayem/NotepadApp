@@ -1,17 +1,42 @@
 package com.mrmindteam.notepadapp.activities;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.media.RingtoneManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.system.Os;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.itextpdf.text.pdf.qrcode.WriterException;
+import com.mrmindteam.notepadapp.BuildConfig;
 import com.mrmindteam.notepadapp.Constants;
 import com.mrmindteam.notepadapp.NoteLockMVP.LockNoteActivity;
 import com.mrmindteam.notepadapp.R;
@@ -22,6 +47,9 @@ import com.mrmindteam.notepadapp.listeners.NoteListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 
 public class MainActivity extends AppCompatActivity implements NoteListener {
 
@@ -35,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     private ArrayList<Note> list;
     ImageView addNoteMainIV;
 
+    ImageView mShareAppBtn, mAboutUsBtn;
+
     //    EditText mSearchET;
     SearchView searchView;
     private int noteClickedPosition = -1;
@@ -45,6 +75,17 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mShareAppBtn = findViewById(R.id.share_btn);
+        mAboutUsBtn = findViewById(R.id.about_us_btn);
+
+        mShareAppBtn.setOnClickListener(v -> {
+            showQrDialog();
+        });
+
+        mAboutUsBtn.setOnClickListener(v -> {
+            startActivity(new Intent(this, AboutUsActivity.class));
+        });
 
         addNoteMainIV = findViewById(R.id.add_note_main);
         mRV = findViewById(R.id.rv_notes);
@@ -100,6 +141,52 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
     }
 
+    private void showQrDialog() {
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View view = factory.inflate(R.layout.dialog_qr_code, null);
+        final AlertDialog qr_code_dialog = new AlertDialog.Builder(this).create();
+
+        qr_code_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        qr_code_dialog.setView(view);
+
+        ImageView qrCodeIV = view.findViewById(R.id.idIVQrcode);
+        Bitmap bitmap;
+        QRGEncoder qrgEncoder;
+
+        // the windowmanager service.
+        WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        // initializing a variable for default display.
+        Display display = manager.getDefaultDisplay();
+        // creating a variable for point which
+        // is to be displayed in QR Code.
+        Point point = new Point();
+        display.getSize(point);
+        // getting width and
+        // height of a point
+        int width = point.x;
+        int height = point.y;
+        // generating dimension from width and height.
+        int dimen = width < height ? width : height;
+        dimen = dimen * 3 / 4;
+
+        // setting this dimensions inside our qr code
+        // encoder to generate our qr code.
+        qrgEncoder = new QRGEncoder("https://play.google.com/store/apps/details?id="+getPackageName(), null, QRGContents.Type.TEXT, dimen);
+        try {
+            // getting our qrcode in the form of bitmap.
+            bitmap = qrgEncoder.encodeAsBitmap();
+            // the bitmap is set inside our image
+            // view using .setimagebitmap method.
+            qrCodeIV.setImageBitmap(bitmap);
+        } catch (com.google.zxing.WriterException e) {
+            // this method is called for
+            // exception handling.
+            Log.e("Tag", e.toString());
+        }
+        qr_code_dialog.show();
+    }
+
 
     private void getNotes(final int requestCode, final boolean isNoteDeleted) {
 
@@ -121,6 +208,21 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                     //here we are adding only newly added note from db to list add scrolling to top
                 } else if (requestCode == REQUEST_CODE_ADD_NOTE) {
                     list.add(0, notes.get(0));
+                    //todo notifiaction here
+                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        show_Notification(notes.get(0));
+                    }else {
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(MainActivity.this)
+                                        .setSmallIcon(R.drawable.ic_notification)
+                                        .setContentTitle(notes.get(0).getTitle())
+                                        .setContentText(notes.get(0).getNoteText());
+                        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.notify(500, mBuilder.build());
+                    }
+
+
                     mAdapter.notifyItemInserted(0);
                     mRV.smoothScrollToPosition(0);
                     //remove note from the clicked position  and add latest updated note to same position
@@ -185,6 +287,29 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
             intent.putExtra(Constants.NOTE, note);
             startActivityForResult(intent, REQUEST_CODE_UPDATE_NOTE);
         }
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void show_Notification(Note note){
+
+        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+        String CHANNEL_ID="MYCHANNEL";
+        NotificationChannel notificationChannel=new NotificationChannel(CHANNEL_ID,"name",NotificationManager.IMPORTANCE_LOW);
+        PendingIntent pendingIntent=PendingIntent.getActivity(getApplicationContext(),1,intent,0);
+        Notification notification = new Notification.Builder(getApplicationContext(),CHANNEL_ID)
+                .setContentText(note.getNoteText())
+                .setContentTitle(note.getTitle())
+                .setContentIntent(pendingIntent)
+                .setChannelId(CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .build();
+
+        NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(notificationChannel);
+        notificationManager.notify(1,notification);
 
 
     }

@@ -19,7 +19,8 @@ public abstract  class NotesDB extends RoomDatabase {
                     ctx,
                     NotesDB.class,
                     "notes_db"
-            ).build();
+            ).allowMainThreadQueries()
+                    .build();
         }
         return notesDB;
     }

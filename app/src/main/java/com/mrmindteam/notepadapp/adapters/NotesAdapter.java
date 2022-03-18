@@ -25,6 +25,8 @@ import com.mrmindteam.notepadapp.R;
 import com.mrmindteam.notepadapp.activities.ShareNoteActivity;
 import com.mrmindteam.notepadapp.models.Note;
 import com.mrmindteam.notepadapp.listeners.NoteListener;
+import com.mrmindteam.notepadapp.sqlite.NoteDao;
+import com.mrmindteam.notepadapp.sqlite.NotesDB;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -37,12 +39,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private NoteListener noteListener;
     private Timer timer;
     private ArrayList<Note> notesSearch;
+    NotesDB notesDB;
 
     public NotesAdapter(Context ctx, ArrayList<Note> list, NoteListener noteListener) {
         this.ctx = ctx;
         this.list = list;
         this.noteListener = noteListener;
         notesSearch = list;
+        notesDB = NotesDB.getDataBase(ctx);
     }
 
     @NonNull
@@ -69,6 +73,25 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             Intent intent = new Intent(ctx, ShareNoteActivity.class);
             intent.putExtra("share", list.get(position));
             ctx.startActivity(intent);
+        });
+
+        if(list.get(position).isFavorite()){
+            holder.fav.setImageDrawable(ctx.getResources().getDrawable(R.drawable.star_filled));
+        }else {
+            holder.fav.setImageDrawable(ctx.getResources().getDrawable(R.drawable.star_outline));
+        }
+
+        holder.fav.setOnClickListener(v -> {
+            if(list.get(position).isFavorite()){
+                holder.fav.setImageDrawable(ctx.getResources().getDrawable(R.drawable.star_outline));
+                list.get(position).setFavorite(false);
+                notifyDataSetChanged();
+            }else {
+                holder.fav.setImageDrawable(ctx.getResources().getDrawable(R.drawable.star_filled));
+                list.get(position).setFavorite(true);
+                notifyDataSetChanged();
+            }
+            notesDB.noteDao().updateNote(list.get(position));
         });
 
 
@@ -126,7 +149,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         TextView title , subtitle, dateTime;
         LinearLayout noteLayout;
         RoundedImageView  imageNoteRIV;
-        ImageView share, record, lock, unlock;
+        ImageView share, record, lock, unlock, fav;
 
 
         NoteViewHolder(@NonNull View itemView) {
@@ -140,6 +163,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             record = itemView.findViewById(R.id.record);
             lock = itemView.findViewById(R.id.lock);
             unlock = itemView.findViewById(R.id.unlock);
+            fav = itemView.findViewById(R.id.fav_btn);
 
         }
 
@@ -176,6 +200,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 lock.setVisibility(View.GONE);
                 unlock.setVisibility(View.VISIBLE);
             }
+
+
+
         }
 
 
