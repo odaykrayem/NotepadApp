@@ -14,4 +14,4 @@ also we can:
 -make/unmake note as favorite
 -lock/unlock note
 -share note as image
--QR code generated from app url
+-display QR code generated from app url
