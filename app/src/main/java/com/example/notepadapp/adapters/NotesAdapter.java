@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.adapters;
+package com.example.notepadapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,13 +20,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.mrmindteam.notepadapp.NoteLockMVP.LockNoteActivity;
-import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.activities.ShareNoteActivity;
-import com.mrmindteam.notepadapp.models.Note;
-import com.mrmindteam.notepadapp.listeners.NoteListener;
-import com.mrmindteam.notepadapp.sqlite.NoteDao;
-import com.mrmindteam.notepadapp.sqlite.NotesDB;
+import com.example.notepadapp.R;
+import com.example.notepadapp.activities.ShareNoteActivity;
+import com.example.notepadapp.models.Note;
+import com.example.notepadapp.listeners.NoteListener;
+import com.example.notepadapp.sqlite.NotesDB;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -164,11 +162,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             lock = itemView.findViewById(R.id.lock);
             unlock = itemView.findViewById(R.id.unlock);
             fav = itemView.findViewById(R.id.fav_btn);
-
         }
 
         void setNote(Note note){
-            title.setText(note.getTitle());
+             title.setText(note.getTitle());
             if(note.getSubtitle().trim().isEmpty()){
                 subtitle.setVisibility(View.GONE);
             }else{

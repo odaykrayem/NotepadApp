@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.NoteLockMVP;
+package com.example.notepadapp.NoteLockMVP;
 
 import android.os.Handler;
 import android.text.TextUtils;
@@ -7,7 +7,6 @@ public class LockNoteInteractor {
 
     interface OnLoginFinishedListener {
 //        void onUsernameError();
-
         void onPasswordValidationError();
 
         void onPasswordVerificationError();

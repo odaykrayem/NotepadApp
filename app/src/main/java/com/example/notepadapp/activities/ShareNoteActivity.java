@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.activities;
+package com.example.notepadapp.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,9 +17,9 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mrmindteam.notepadapp.BuildConfig;
-import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.models.Note;
+import com.example.notepadapp.BuildConfig;
+import com.example.notepadapp.R;
+import com.example.notepadapp.models.Note;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

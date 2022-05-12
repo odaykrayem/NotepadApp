@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.activities;
+package com.example.notepadapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,10 +38,10 @@ import com.devlomi.record_view.OnRecordListener;
 import com.devlomi.record_view.RecordButton;
 import com.devlomi.record_view.RecordView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.mrmindteam.notepadapp.Constants;
-import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.sqlite.NotesDB;
-import com.mrmindteam.notepadapp.models.Note;
+import com.example.notepadapp.Constants;
+import com.example.notepadapp.R;
+import com.example.notepadapp.sqlite.NotesDB;
+import com.example.notepadapp.models.Note;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +52,7 @@ import java.util.Locale;
 
 import me.jagar.chatvoiceplayerlibrary.VoicePlayerView;
 
-import static com.mrmindteam.notepadapp.R.*;
+import static com.example.notepadapp.R.*;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
@@ -66,8 +66,8 @@ public class CreateNoteActivity extends AppCompatActivity {
     RecordView recordView;
 
 //    NotesDB myDataBase;
-
 //    private String selectedNoteColor;
+
      private String selectedNoteColor;
      private String selectedImagePath;
      private String audioPath;
@@ -181,8 +181,10 @@ public class CreateNoteActivity extends AppCompatActivity {
 
 
         if(alreadyAvailableNote.getWebLink() != null && !alreadyAvailableNote.getWebLink().trim().isEmpty()){
+            Log.e("link", alreadyAvailableNote.getWebLink() + "hh" );
             mWEbUrlTV.setText(alreadyAvailableNote.getWebLink());
             mWEbUrlTV.setVisibility(View.VISIBLE);
+            webUrlLayout.setVisibility(View.VISIBLE);
 
         }
         if(alreadyAvailableNote.isLocked()){

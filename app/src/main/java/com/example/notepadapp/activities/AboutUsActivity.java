@@ -1,10 +1,10 @@
-package com.mrmindteam.notepadapp.activities;
+package com.example.notepadapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.mrmindteam.notepadapp.R;
+import com.example.notepadapp.R;
 
 public class AboutUsActivity extends AppCompatActivity {
 

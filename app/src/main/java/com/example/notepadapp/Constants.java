@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp;
+package com.example.notepadapp;
 
 public class Constants {
 
@@ -9,7 +9,6 @@ public class Constants {
     public static final String COLOR_NOTE_3 = "#ff4842";
     public static final String COLOR_NOTE_4 = "#3a52fc";
     public static final String COLOR_NOTE_5 = "#000000";
-
 
     public static final String IS_NOTE_DELETED = "isNoteDeleted";
     public static final String LOCK = "Lock Note";

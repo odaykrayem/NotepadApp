@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp;
+package com.example.notepadapp;
 
 import org.junit.Test;
 

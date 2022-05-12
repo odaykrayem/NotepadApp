@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.NoteLockMVP;
+package com.example.notepadapp.NoteLockMVP;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,8 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mrmindteam.notepadapp.Constants;
-import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.activities.CreateNoteActivity;
-import com.mrmindteam.notepadapp.models.Note;
+import com.example.notepadapp.Constants;
+import com.example.notepadapp.R;
 
 public class LockNoteActivity extends AppCompatActivity implements LockNoteView {
 
@@ -44,6 +42,7 @@ public class LockNoteActivity extends AppCompatActivity implements LockNoteView 
     public void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
     }
+
 
     @Override
     public void hideProgress() {

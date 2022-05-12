@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.models;
+package com.example.notepadapp.models;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

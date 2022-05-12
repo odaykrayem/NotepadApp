@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.mrmindteam.notepadapp">
+    package="com.example.notepadapp">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,15 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".activities.AboutUsActivity"></activity>
-        <activity android:name=".NoteLockMVP.LockNoteActivity" />
-        <activity android:name=".activities.ShareNoteActivity" />
+        <activity android:name="com.example.notepadapp.activities.AboutUsActivity"></activity>
+        <activity android:name="com.example.notepadapp.NoteLockMVP.LockNoteActivity" />
+        <activity android:name="com.example.notepadapp.activities.ShareNoteActivity" />
         <activity
-            android:name=".activities.CreateNoteActivity"
+            android:name="com.example.notepadapp.activities.CreateNoteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.example.notepadapp.activities.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

@@ -1,8 +1,7 @@
-package com.mrmindteam.notepadapp.NoteLockMVP;
-
-import com.mrmindteam.notepadapp.models.Note;
+package com.example.notepadapp.NoteLockMVP;
 
 public interface LockNoteView {
+
     void showProgress();
 
     void hideProgress();

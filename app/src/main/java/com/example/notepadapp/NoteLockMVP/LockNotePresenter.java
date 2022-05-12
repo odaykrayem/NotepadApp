@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.NoteLockMVP;
+package com.example.notepadapp.NoteLockMVP;
 
 public class LockNotePresenter implements LockNoteInteractor.OnLoginFinishedListener {
 

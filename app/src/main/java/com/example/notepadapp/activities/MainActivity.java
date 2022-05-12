@@ -1,4 +1,4 @@
-package com.mrmindteam.notepadapp.activities;
+package com.example.notepadapp.activities;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -31,13 +31,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.mrmindteam.notepadapp.Constants;
-import com.mrmindteam.notepadapp.NoteLockMVP.LockNoteActivity;
-import com.mrmindteam.notepadapp.R;
-import com.mrmindteam.notepadapp.adapters.NotesAdapter;
-import com.mrmindteam.notepadapp.sqlite.NotesDB;
-import com.mrmindteam.notepadapp.models.Note;
-import com.mrmindteam.notepadapp.listeners.NoteListener;
+import com.example.notepadapp.Constants;
+import com.example.notepadapp.NoteLockMVP.LockNoteActivity;
+import com.example.notepadapp.R;
+import com.example.notepadapp.adapters.NotesAdapter;
+import com.example.notepadapp.sqlite.NotesDB;
+import com.example.notepadapp.models.Note;
+import com.example.notepadapp.listeners.NoteListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,26 +99,6 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         mRV.setAdapter(mAdapter);
         getNotes(REQUEST_CODE_SHOW_NOTES, false);
 
-//        mSearchET = findViewById(R.id.input_search);
-//        mSearchET.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                mAdapter.cancelTimer();
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if(list.size() != 0){
-//                    mAdapter.searchNotes(s.toString());
-//                }
-//            }
-//        });
-
         searchView = findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -132,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                 return true;
             }
         });
+
+
     }
 
     private void showQrDialog() {
@@ -166,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         // setting this dimensions inside our qr code
         // encoder to generate our qr code.
         qrgEncoder = new QRGEncoder("https://play.google.com/store/apps/details?id="+getPackageName(), null, QRGContents.Type.TEXT, dimen);
+
         try {
             // getting our qrcode in the form of bitmap.
             bitmap = qrgEncoder.encodeAsBitmap();
@@ -201,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                     //here we are adding only newly added note from db to list add scrolling to top
                 } else if (requestCode == REQUEST_CODE_ADD_NOTE) {
                     list.add(0, notes.get(0));
-                    //todo notifiaction here
                     if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                         show_Notification(notes.get(0));
                     }else {
@@ -230,20 +212,11 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
 
                 }
-//                Log.e("Notes : ",notes.toString());
-//                if (list.size() == 0){
-//                    list.addAll(notes);
-//                    mAdapter.notifyDataSetChanged();
-//                }else {
-//                    list.add(0, notes.get(0));
-//                    mAdapter.notifyItemInserted(0);
-//                }
-//                mRV.smoothScrollToPosition(0);
+
             }
         }
         new getNotesTask().execute();
 
-//        ArrayList<Note> notes = (ArrayList<Note>) NotesDB.getDataBase(getApplicationContext()).noteDao().getAllNotes();
     }
     //Update the note list after adding a note from CreateNote Activity
 
@@ -268,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     @Override
     public void onNoteClicked(Note note, int position) {
         noteClickedPosition = position;
-        noteObject = note;
 
         if (note.isLocked()) {
             Intent intent = new Intent(this, LockNoteActivity.class);
@@ -303,7 +275,6 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         NotificationManager notificationManager=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannel(notificationChannel);
         notificationManager.notify(1,notification);
-
 
     }
 
